@@ -23,9 +23,8 @@ def get_CEA_results(C, Pc, Pe, OF, AR):
     _, gam_chamber = C.get_Chamber_MolWt_gamma(Pc=Pc, MR=OF, eps=AR)
     ISP = C.get_Isp(Pc=Pc, MR=OF, eps=AR)
     Cstar = C.get_Cstar(Pc=Pc, MR=OF)
-    _, at, _ = C.get_SonicVelocities(Pc=Pc, MR=OF, eps=AR)
 
-    return gam_chamber, ISP, Cstar, at
+    return gam_chamber, ISP, Cstar
 
 
 def get_thrust_coeff(Pc, Pe, P0, gamma, AR):
