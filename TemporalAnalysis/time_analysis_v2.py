@@ -279,19 +279,6 @@ def plot_results_separate(t, R, mdot_ox, mdot_fuel, Pc, thrust):
     fig.savefig('Gox.'+FORMAT, format=FORMAT)
 
 
-def print_ranges(t, R, mdot_ox, mdot_fuel, Pc, thrust):
-    print(30*'=')
-    print('Printing ranges')
-    print('Thrust [N]: %f - %f' % (np.min(thrust), np.max(thrust)))
-    print('mdot_ox [kg/s]: %f - %f' % (np.min(mdot_ox), np.max(mdot_ox)))
-    print('Pc [psi]: %f - %f' % (np.min(Pc)/PSI_TO_PA, np.max(Pc)/PSI_TO_PA))
-    print('O/F Ratio: %f - %f' % (np.min(mdot_ox/mdot_fuel),
-        np.max(mdot_ox/mdot_fuel)))
-    print('Oxidizer Mass Flux [kg/m^2/s]: %f - %f' % (np.min(mdot_ox / (np.pi * R**2)),np.max(mdot_ox / (np.pi * R**2))))
-    print('Average Isp [s]: %f' % np.average(ISP))
-    print(30*'=')
-
-
 if __name__ == '__main__':
     filename = 'input.ini'
     if (len(sys.argv) == 2):
@@ -307,9 +294,23 @@ if __name__ == '__main__':
     print_IC(t, R, mdot_ox, mdot_fuel, Pc, OF, Cstar, Pe, thrust)
 
     solve(config, t, R, mdot_ox, mdot_fuel, Pc, OF, Cstar, Pe, thrust, ISP)
+    totimp = np.trapz(thrust, t) # calculate total impulse
 
-    print_ranges(t, R, mdot_ox, mdot_fuel, Pc, thrust)
-
+    print(30*'=')
+    print('Design Values')
+    print('Thrust: %3.2f - %3.2f N' % (np.min(thrust), np.max(thrust)))
+    print('mdot_ox: %3.2f - %3.2f g/s' %
+          (1000*np.min(mdot_ox), 1000*np.max(mdot_ox)))
+    print('Pc [psi]: %3.2f - %3.2f psi' %
+          (np.min(Pc)/PSI_TO_PA, np.max(Pc)/PSI_TO_PA))
+    print('O/F Ratio: %3.2f - %3.2f' % (np.min(mdot_ox/mdot_fuel),
+                                        np.max(mdot_ox/mdot_fuel)))
+    print('Oxidizer Mass Flux [kg/m^2/s]: %3.2f - %3.2f' %
+          (np.min(mdot_ox / (np.pi * R**2)), np.max(mdot_ox / (np.pi * R**2))))
+    print('Average Isp: %3.2f s' % np.average(ISP))
+    print('Average C*: %3.2f m/s' % np.average(Cstar))
+    print('Total Impulse: %3.2f N s' % totimp)
+    print(30*'=')
 
     if config.getboolean('Params', 'plot'):
         filename = config.get('Params', 'plot_file_name',
