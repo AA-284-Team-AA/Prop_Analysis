@@ -16,7 +16,9 @@ pip install -r my_env.txt
 
 ## Inputs for Chosen Design Values
 ![Design Values](designvals.png)
+
 Inputs to arrive at the design values shown above:
+
 ```
 # fuel density [kg/m3]
 rho_fuel = 1180 
